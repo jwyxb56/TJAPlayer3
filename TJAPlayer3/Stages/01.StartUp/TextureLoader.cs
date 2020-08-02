@@ -106,11 +106,21 @@ namespace TJAPlayer3
             SongSelect_Score_Select = TxC(SONGSELECT + @"Score_Select.png");
             //SongSelect_Frame_Dani = TxC(SONGSELECT + @"Frame_Dani.png");
             SongSelect_GenreText = TxC(SONGSELECT + @"GenreText.png");
-            SongSelect_Cursor_Left = TxC(SONGSELECT + @"Cursor_Left.png");
-            SongSelect_Cursor_Right = TxC(SONGSELECT + @"Cursor_Right.png");
+            SongSelect_Shadow = TxC(SONGSELECT + @"Shadow.png");
+            SongSelect_nanido = TxC(SONGSELECT + @"ND_nanido.png");
+
+
             for (int i = 0; i < SongSelect_Bar_Genre.Length; i++)
             {
                 SongSelect_Bar_Genre[i] = TxC(SONGSELECT + @"Bar_Genre_" + i.ToString() + ".png");
+            }
+            for (int i = 0; i < SongSelect_ND_Genre.Length; i++)
+            {
+                SongSelect_ND_Genre[i] = TxC(SONGSELECT + @"ND_Genre_" + i.ToString() + ".png");
+            }
+            for (int i = 0; i < SongSelect_Bar2_Genre.Length; i++)
+            {
+                SongSelect_Bar2_Genre[i] = TxC(SONGSELECT + @"Bar2_Genre_" + i.ToString() + ".png");
             }
             for (int i = 0; i < SongSelect_Frame_Box.Length; i++)
             {
@@ -125,6 +135,10 @@ namespace TJAPlayer3
             {
                 SongSelect_GenreBack[i] = TxC(SONGSELECT + @"GenreBackground_" + i.ToString() + ".png");
             }
+            for (int i = 0; i < 16; i++)
+            {
+                SongSelect_Chara[i] = TxC(SONGSELECT + @"Chara\"+ i.ToString() + ".png");
+            }
             SongSelect_ScoreWindow_Text = TxC(SONGSELECT + @"ScoreWindow_Text.png");
             SongSelect_Rating = TxC(SONGSELECT + @"Rating.png");
             #endregion
@@ -133,6 +147,8 @@ namespace TJAPlayer3
             SongLoading_Plate = TxC(SONGLOADING + @"Plate.png");
             SongLoading_FadeIn = TxC(SONGLOADING + @"FadeIn.png");
             SongLoading_FadeOut = TxC(SONGLOADING + @"FadeOut.png");
+            SongLoading_Fade = TxC(SONGLOADING + @"Fade.png");
+
             #endregion
 
             #region 5_演奏画面
@@ -305,8 +321,14 @@ namespace TJAPlayer3
             Background = TxC(GAME + Background + @"0\" + @"Background.png");
             Background_Up[0] = TxC(GAME + BACKGROUND + @"0\" + @"1P_Up.png");
             Background_Up[1] = TxC(GAME + BACKGROUND + @"0\" + @"2P_Up.png");
+            Background_Up2[0] = TxC(GAME + BACKGROUND + @"0\" + @"1P_Up2.png");
+            Background_Up2[1] = TxC(GAME + BACKGROUND + @"0\" + @"2P_Up2.png");
+
             Background_Up_Clear[0] = TxC(GAME + BACKGROUND + @"0\" + @"1P_Up_Clear.png");
             Background_Up_Clear[1] = TxC(GAME + BACKGROUND + @"0\" + @"2P_Up_Clear.png");
+            Background_Up_Clear2[0] = TxC(GAME + BACKGROUND + @"0\" + @"1P_Up_Clear2.png");
+            Background_Up_Clear2[1] = TxC(GAME + BACKGROUND + @"0\" + @"2P_Up_Clear2.png");
+
             Background_Down = TxC(GAME + BACKGROUND + @"0\" + @"Down.png");
             Background_Down_Clear = TxC(GAME + BACKGROUND + @"0\" + @"Down_Clear.png");
             Background_Down_Scroll = TxC(GAME + BACKGROUND + @"0\" + @"Down_Scroll.png");
@@ -473,6 +495,7 @@ namespace TJAPlayer3
 
             #region 6_結果発表
             Result_Background = TxC(RESULT + @"Background.png");
+            Result_Background2 = TxC(RESULT + @"Background2.png");
             Result_FadeIn = TxC(RESULT + @"FadeIn.png");
             Result_Gauge = TxC(RESULT + @"Gauge.png");
             Result_Gauge_Base = TxC(RESULT + @"Gauge_Base.png");
@@ -541,18 +564,25 @@ namespace TJAPlayer3
             TJAPlayer3.t安全にDisposeする(ref SongSelect_Frame_Random);
             TJAPlayer3.t安全にDisposeする(ref SongSelect_Score_Select);
             TJAPlayer3.t安全にDisposeする(ref SongSelect_GenreText);
-            TJAPlayer3.t安全にDisposeする(ref SongSelect_Cursor_Left);
-            TJAPlayer3.t安全にDisposeする(ref SongSelect_Cursor_Right);
+            TJAPlayer3.t安全にDisposeする(SongSelect_Bar2_Genre);
             TJAPlayer3.t安全にDisposeする(SongSelect_Bar_Genre);
+            TJAPlayer3.t安全にDisposeする(SongSelect_ND_Genre);
             TJAPlayer3.t安全にDisposeする(SongSelect_Frame_Box);
             TJAPlayer3.t安全にDisposeする(SongSelect_ScoreWindow);
             TJAPlayer3.t安全にDisposeする(SongSelect_GenreBack);
+            TJAPlayer3.t安全にDisposeする(SongSelect_Chara);
+
             TJAPlayer3.t安全にDisposeする(ref SongSelect_ScoreWindow_Text);
+            TJAPlayer3.t安全にDisposeする(ref SongSelect_Shadow);
+            TJAPlayer3.t安全にDisposeする(ref SongSelect_nanido);
+
             TJAPlayer3.t安全にDisposeする(ref SongSelect_Rating);
             #endregion
 
             #region 4_読み込み画面
             TJAPlayer3.t安全にDisposeする(ref SongLoading_Plate);
+            TJAPlayer3.t安全にDisposeする(ref SongLoading_Fade);
+
             TJAPlayer3.t安全にDisposeする(ref SongLoading_FadeIn);
             TJAPlayer3.t安全にDisposeする(ref SongLoading_FadeOut);
             #endregion
@@ -603,6 +633,9 @@ namespace TJAPlayer3
             TJAPlayer3.t安全にDisposeする(ref Background);
             TJAPlayer3.t安全にDisposeする(Background_Up);
             TJAPlayer3.t安全にDisposeする(Background_Up_Clear);
+            TJAPlayer3.t安全にDisposeする(Background_Up2);
+            TJAPlayer3.t安全にDisposeする(Background_Up_Clear2);
+
             TJAPlayer3.t安全にDisposeする(ref Background_Down);
             TJAPlayer3.t安全にDisposeする(ref Background_Down_Clear);
             TJAPlayer3.t安全にDisposeする(ref Background_Down_Scroll);
@@ -710,6 +743,7 @@ namespace TJAPlayer3
 
             #region 6_結果発表
             TJAPlayer3.t安全にDisposeする(ref Result_Background);
+            TJAPlayer3.t安全にDisposeする(ref Result_Background2);
             TJAPlayer3.t安全にDisposeする(ref Result_FadeIn);
             TJAPlayer3.t安全にDisposeする(ref Result_Gauge);
             TJAPlayer3.t安全にDisposeする(ref Result_Gauge_Base);
@@ -766,6 +800,7 @@ namespace TJAPlayer3
             SongSelect_Auto,
             SongSelect_Level,
             SongSelect_Branch,
+            SongSelect_Shadow,
             SongSelect_Branch_Text,
             SongSelect_Frame_Score,
             SongSelect_Frame_BackBox,
@@ -773,22 +808,25 @@ namespace TJAPlayer3
             SongSelect_Score_Select,
             SongSelect_Bar_Center,
             SongSelect_GenreText,
-            SongSelect_Cursor_Left,
-            SongSelect_Cursor_Right,
-            SongSelect_ScoreWindow_Text,
-            SongSelect_Rating;
-
-        public readonly CTexture[] SongSelect_GenreBack = new CTexture[9];
+           SongSelect_ScoreWindow_Text,
+            SongSelect_Rating,
+        SongSelect_nanido;
+          
+        public readonly CTexture[] SongSelect_GenreBack = new CTexture[10];
         public readonly CTexture[] SongSelect_ScoreWindow = new CTexture[(int)Difficulty.Total];
-        public readonly CTexture[] SongSelect_Bar_Genre = new CTexture[9];
-        public readonly CTexture[] SongSelect_Frame_Box = new CTexture[9];
+        public readonly CTexture[] SongSelect_Bar_Genre = new CTexture[10];
+        public readonly CTexture[] SongSelect_ND_Genre = new CTexture[10];
+        public readonly CTexture[] SongSelect_Chara = new CTexture[16];
+        public readonly CTexture[] SongSelect_Bar2_Genre = new CTexture[10];
+        public readonly CTexture[] SongSelect_Frame_Box = new CTexture[10];
 
         #endregion
 
         #region 4_読み込み画面
         public CTexture SongLoading_Plate,
             SongLoading_FadeIn,
-            SongLoading_FadeOut;
+            SongLoading_FadeOut,
+        SongLoading_Fade;
         #endregion
 
         #region 5_演奏画面
@@ -832,6 +870,9 @@ namespace TJAPlayer3
             Background_Down_Scroll;
         public readonly CTexture[] Background_Up = new CTexture[2];
         public readonly CTexture[] Background_Up_Clear = new CTexture[2];
+        public readonly CTexture[] Background_Up2 = new CTexture[2];
+        public readonly CTexture[] Background_Up_Clear2 = new CTexture[2];
+
 
         #endregion
         #region 太鼓
@@ -941,6 +982,7 @@ namespace TJAPlayer3
 
         #region 6_結果発表
         public CTexture Result_Background,
+            Result_Background2,
             Result_FadeIn,
             Result_Gauge,
             Result_Gauge_Hard,

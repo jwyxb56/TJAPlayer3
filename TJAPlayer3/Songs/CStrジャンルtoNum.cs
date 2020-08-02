@@ -25,6 +25,8 @@
                     return 7;
                 default:
                     return 8;
+                case CStrジャンル.DAN:
+                    return 9;
             }
         }
 
@@ -49,6 +51,9 @@
                     return EジャンルAC15SortOrder.ゲームミュージック;
                 case CStrジャンル.ナムコオリジナル:
                     return EジャンルAC15SortOrder.ナムコオリジナル;
+                case CStrジャンル.DAN:
+                    return EジャンルAC15SortOrder.DAN;
+
                 default:
                     return EジャンルAC15SortOrder.Unknown;
             }
@@ -85,6 +90,8 @@
                 case CStrジャンル.ボーカロイドJP:
                 case CStrジャンル.ボーカロイドEN:
                     return 8;
+                case CStrジャンル.DAN:
+                    return 9;
                 default:
                     return 0;
             }

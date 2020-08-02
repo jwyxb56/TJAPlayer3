@@ -23,6 +23,9 @@
                 case CStrジャンル.ボーカロイドJP:
                 case CStrジャンル.ボーカロイドEN:
                     return "Vocaloid";
+                case CStrジャンル.DAN:
+                    return "DAN";
+
                 default:
                     return null;
             }

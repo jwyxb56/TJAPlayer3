@@ -90,15 +90,15 @@ namespace TJAPlayer3
 
             if (TJAPlayer3.Skin.Result_MusicName_ReferencePoint == CSkin.ReferencePoint.Center)
             {
-                this.txMusicName.t2D描画(TJAPlayer3.app.Device, TJAPlayer3.Skin.Result_MusicName_XY[0] - ((this.txMusicName.szテクスチャサイズ.Width * txMusicName.vc拡大縮小倍率.X) / 2), TJAPlayer3.Skin.Result_MusicName_XY[1]);
+                this.txMusicName.t2D中心基準描画(TJAPlayer3.app.Device, TJAPlayer3.Skin.Result_MusicName_XY[0] - ((this.txMusicName.szテクスチャサイズ.Width * txMusicName.vc拡大縮小倍率.X) / 2), TJAPlayer3.Skin.Result_MusicName_XY[1]);
             }
             else if (TJAPlayer3.Skin.Result_MusicName_ReferencePoint == CSkin.ReferencePoint.Left)
             {
-                this.txMusicName.t2D描画(TJAPlayer3.app.Device, TJAPlayer3.Skin.Result_MusicName_XY[0], TJAPlayer3.Skin.Result_MusicName_XY[1]);
+                this.txMusicName.t2D中心基準描画(TJAPlayer3.app.Device, TJAPlayer3.Skin.Result_MusicName_XY[0] , TJAPlayer3.Skin.Result_MusicName_XY[1] );
             }
             else
             {
-                this.txMusicName.t2D描画(TJAPlayer3.app.Device, TJAPlayer3.Skin.Result_MusicName_XY[0] - this.txMusicName.szテクスチャサイズ.Width * txMusicName.vc拡大縮小倍率.X, TJAPlayer3.Skin.Result_MusicName_XY[1]);
+                this.txMusicName.t2D中心基準描画(TJAPlayer3.app.Device, TJAPlayer3.Skin.Result_MusicName_XY[0] - this.txMusicName.szテクスチャサイズ.Width * txMusicName.vc拡大縮小倍率.X - 612, TJAPlayer3.Skin.Result_MusicName_XY[1]);
             }
 
             if(TJAPlayer3.stage選曲.n確定された曲の難易度 != (int)Difficulty.Dan)

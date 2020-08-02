@@ -727,6 +727,19 @@ namespace TJAPlayer3
 								//-----------------------------
 								#endregion
 								break;
+
+							case (int)CStageタイトル.E戻り値.DAN:
+								#region [ 選曲処理へ ]
+								//-----------------------------
+								r現在のステージ.On非活性化();
+								Trace.TraceInformation("----------------------");
+								Trace.TraceInformation("■ 選曲");
+								stage選曲.On活性化();
+								r直前のステージ = r現在のステージ;
+								r現在のステージ = stage選曲;
+								//-----------------------------
+								#endregion
+								break;
 						}
 
 						//this.tガベージコレクションを実行する();		// #31980 2013.9.3 yyagi タイトル画面でだけ、毎フレームGCを実行して重くなっていた問題の修正

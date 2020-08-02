@@ -236,7 +236,8 @@ namespace TJAPlayer3
 
             if (TJAPlayer3.Tx.SongLoading_Plate != null)
             {
-                TJAPlayer3.Tx.SongLoading_Plate.bスクリーン合成 = TJAPlayer3.Skin.SongLoading_Plate_ScreenBlend; //あまりにも出番が無い
+			
+				//TJAPlayer3.Tx.SongLoading_Plate.bスクリーン合成 = TJAPlayer3.Skin.SongLoading_Plate_ScreenBlend; //あまりにも出番が無い
                 TJAPlayer3.Tx.SongLoading_Plate.Opacity = C変換.nParsentTo255((this.ct曲名表示.n現在の値 / 30.0));
                 if(TJAPlayer3.Skin.SongLoading_Plate_ReferencePoint == CSkin.ReferencePoint.Left)
                 {
@@ -289,10 +290,14 @@ namespace TJAPlayer3
                     this.txサブタイトル.t2D描画(TJAPlayer3.app.Device, (TJAPlayer3.Skin.SongLoading_SubTitle_XY[0] - ((this.txサブタイトル.sz画像サイズ.Width * txサブタイトル.vc拡大縮小倍率.X) / 2)), TJAPlayer3.Skin.SongLoading_SubTitle_XY[1] - (this.txサブタイトル.sz画像サイズ.Height / 2));
                 }
             }
+
+			if(TJAPlayer3.Tx.SongLoading_Fade != null)
+			TJAPlayer3.Tx.SongLoading_Fade.t2D描画(TJAPlayer3.app.Device, 0, 0);
+
 			//-----------------------------
 			#endregion
 
-			switch( base.eフェーズID )
+			switch ( base.eフェーズID )
 			{
 				case CStage.Eフェーズ.共通_フェードイン:
 					//if( this.actFI.On進行描画() != 0 )			    // #27787 2012.3.10 yyagi 曲読み込み画面のフェードインの省略

@@ -2363,38 +2363,38 @@ namespace TJAPlayer3
 
         //リザルト画面
         //現在のデフォルト値はダミーです。
-        public int nResultPanelP1X = 515;
-        public int nResultPanelP1Y = 75;
+        public int nResultPanelP1X = 0;
+        public int nResultPanelP1Y = 0;
         public int nResultPanelP2X = 515;
         public int nResultPanelP2Y = 75;
-        public int nResultScoreP1X = 582;
-        public int nResultScoreP1Y = 252;
+        public int nResultScoreP1X = 72;
+        public int nResultScoreP1Y = 228;
         public int nResultJudge1_P1X = 815;
         public int nResultJudge1_P1Y = 182;
         public int nResultJudge2_P1X = 968;
         public int nResultJudge2_P1Y = 174;
-        public int nResultGreatP1X = 875;
-        public int nResultGreatP1Y = 188;
+        public int nResultGreatP1X = 487;
+        public int nResultGreatP1Y = 190;
         public int nResultGreatP2X = 875;
         public int nResultGreatP2Y = 188;
-        public int nResultGoodP1X = 875;
-        public int nResultGoodP1Y = 226;
+        public int nResultGoodP1X = 487;
+        public int nResultGoodP1Y = 230;
         public int nResultGoodP2X = 875;
         public int nResultGoodP2Y = 226;
-        public int nResultBadP1X = 875;
-        public int nResultBadP1Y = 266;
+        public int nResultBadP1X = 487;
+        public int nResultBadP1Y = 271;
         public int nResultBadP2X = 875;
         public int nResultBadP2Y = 266;
-        public int nResultComboP1X = 1144;
-        public int nResultComboP1Y = 188;
+        public int nResultComboP1X = 487;
+        public int nResultComboP1Y = 354;
         public int nResultComboP2X = 1144;
         public int nResultComboP2Y = 188;
-        public int nResultRollP1X = 1144;
-        public int nResultRollP1Y = 226;
+        public int nResultRollP1X = 487;
+        public int nResultRollP1Y = 313;
         public int nResultRollP2X = 1144;
         public int nResultRollP2Y = 226;
-        public int nResultGaugeBaseP1X = 555;
-        public int nResultGaugeBaseP1Y = 122;
+        public int nResultGaugeBaseP1X = 44;
+        public int nResultGaugeBaseP1Y = 141;
         public int nResultGaugeBaseP2X = 555;
         public int nResultGaugeBaseP2Y = 122;
         public int nResultGaugeBodyP1X = 559;
@@ -2439,7 +2439,7 @@ namespace TJAPlayer3
         public Color SongSelect_ForeColor_Namco = ColorTranslator.FromHtml("#FFFFFF");
         public Color SongSelect_BackColor_JPOP = ColorTranslator.FromHtml("#01455B");
         public Color SongSelect_BackColor_Anime = ColorTranslator.FromHtml("#9D3800");
-        public Color SongSelect_BackColor_VOCALOID = ColorTranslator.FromHtml("#5B6278");
+        public Color SongSelect_BackColor_VOCALOID = ColorTranslator.FromHtml("#262A30");
         public Color SongSelect_BackColor_Children = ColorTranslator.FromHtml("#99001F");
         public Color SongSelect_BackColor_Variety = ColorTranslator.FromHtml("#366600");
         public Color SongSelect_BackColor_Classic = ColorTranslator.FromHtml("#875600");
@@ -2447,7 +2447,7 @@ namespace TJAPlayer3
         public Color SongSelect_BackColor_Namco = ColorTranslator.FromHtml("#980E00");
 
         public Color SongSelect_ForeColor = ColorTranslator.FromHtml("#FFFFFF");              //ジャンルなしの時の色
-        public Color SongSelect_BackColor = ColorTranslator.FromHtml("#000000");              //ジャンルなしの時の色
+        public Color SongSelect_BackColor = ColorTranslator.FromHtml("#4C0303");              //ジャンルなしの時の色
         public Color SongSelect_NowSelect_ForeColor = ColorTranslator.FromHtml("#FFFFFF");    //今選択している曲の色
         public Color SongSelect_NowSelect_BackColor = ColorTranslator.FromHtml("#000000");    //今選択している曲の色
 
@@ -2467,8 +2467,8 @@ namespace TJAPlayer3
         #endregion
         #region SongLoading
         public int[] SongLoading_Plate_XY = new int[] { 640, 360 };
-        public int[] SongLoading_Title_XY = new int[] { 640, 340 };
-        public int[] SongLoading_SubTitle_XY = new int[] { 640, 390 };
+        public int[] SongLoading_Title_XY = new int[] { 640, 210 };
+        public int[] SongLoading_SubTitle_XY = new int[] { 640, 280 };
         public int SongLoading_Title_FontSize = 30;
         public int SongLoading_SubTitle_FontSize = 22;
         public ReferencePoint SongLoading_Plate_ReferencePoint = ReferencePoint.Center;
@@ -2726,7 +2726,7 @@ namespace TJAPlayer3
         public int[] Result_MusicName_XY = new int[] { 1254, 6 };
         public int Result_MusicName_FontSize = 30;
         public ReferencePoint Result_MusicName_ReferencePoint = ReferencePoint.Right;
-        public int[] Result_StageText_XY = new int[] { 230, 6 };
+        public int[] Result_StageText_XY = new int[] { 2030, 6 };
         public int Result_StageText_FontSize = 30;
         public ReferencePoint Result_StageText_ReferencePoint = ReferencePoint.Left;
 

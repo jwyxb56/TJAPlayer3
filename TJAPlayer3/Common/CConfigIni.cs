@@ -864,7 +864,8 @@ namespace TJAPlayer3
 		//public bool bNoMP3Streaming;				// 2014.4.14 yyagi; mp3のシーク位置がおかしくなる場合は、これをtrueにすることで、wavにデコードしてからオンメモリ再生する
 		public int nMasterVolume;
         public bool ShinuchiMode; // 真打モード
-        public bool FastRender; // 事前画像描画モード
+		public bool oed; // 大江戸勘亭流を使っているか
+		public bool FastRender; // 事前画像描画モード
         public int MusicPreTimeMs; // 音源再生前の待機時間ms
         /// <summary>
         /// DiscordのRitch Presenceに再生中の.tjaファイルの情報を送信するかどうか。
@@ -1411,6 +1412,7 @@ namespace TJAPlayer3
             this.nPlayerCount = 1; //2017.08.18 kairera0467 マルチプレイ対応
             ShinuchiMode = false;
             FastRender = true;
+			oed = false;
             MusicPreTimeMs = 1000; // 一秒
             SendDiscordPlayingInformation = true;
             #region[ Ver.K追加 ]
@@ -1501,9 +1503,12 @@ namespace TJAPlayer3
             sw.WriteLine("; Use pre-textures render.");
             sw.WriteLine("{0}={1}", nameof(FastRender), FastRender ? 1 : 0);
             sw.WriteLine();
-            #endregion
-            #region [ Window関連 ]
-            sw.WriteLine( "; 画面モード(0:ウィンドウ, 1:全画面)" );
+			sw.WriteLine("; 大江戸勘亭流を使うか。(0: OFF, 1: ON)");
+			sw.WriteLine("; Use pre-textures render.");
+			sw.WriteLine("{0}={1}", nameof(oed), oed ? 1 : 0);
+			#endregion
+			#region [ Window関連 ]
+			sw.WriteLine( "; 画面モード(0:ウィンドウ, 1:全画面)" );
 			sw.WriteLine( "; Screen mode. (0:Window, 1:Fullscreen)" );
 			sw.WriteLine( "FullScreen={0}", this.b全画面モード ? 1 : 0 );
             sw.WriteLine();
@@ -2081,7 +2086,7 @@ namespace TJAPlayer3
 									//-----------------------------
 									case Eセクション種別.System:
 										{
-#if false		// #23625 2011.1.11 Config.iniからダメージ/回復値の定数変更を行う場合はここを有効にする 087リリースに合わせ機能無効化
+#if false      // #23625 2011.1.11 Config.iniからダメージ/回復値の定数変更を行う場合はここを有効にする 087リリースに合わせ機能無効化
 										//----------------------------------------
 												if (str3.Equals("GaugeFactorD"))
 												{
@@ -2114,99 +2119,99 @@ namespace TJAPlayer3
 										//----------------------------------------
 #endif
 											#region [ Version ]
-											if ( str3.Equals( "Version" ) )
+											if (str3.Equals("Version"))
 											{
 												this.strDTXManiaのバージョン = str4;
 											}
 											#endregion
 											#region [ TJAPath ]
-											else if( str3.Equals( "TJAPath" ) )
+											else if (str3.Equals("TJAPath"))
 											{
 												this.str曲データ検索パス = str4;
 											}
 											#endregion
 											#region [ skin関係 ]
-											else if ( str3.Equals( "SkinPath" ) )
+											else if (str3.Equals("SkinPath"))
 											{
 												string absSkinPath = str4;
-												if ( !System.IO.Path.IsPathRooted( str4 ) )
+												if (!System.IO.Path.IsPathRooted(str4))
 												{
-													absSkinPath = System.IO.Path.Combine( TJAPlayer3.strEXEのあるフォルダ, "System" );
-													absSkinPath = System.IO.Path.Combine( absSkinPath, str4 );
-													Uri u = new Uri( absSkinPath );
-													absSkinPath = u.AbsolutePath.ToString();	// str4内に相対パスがある場合に備える
-													absSkinPath = System.Web.HttpUtility.UrlDecode( absSkinPath );						// デコードする
-													absSkinPath = absSkinPath.Replace( '/', System.IO.Path.DirectorySeparatorChar );	// 区切り文字が\ではなく/なので置換する
+													absSkinPath = System.IO.Path.Combine(TJAPlayer3.strEXEのあるフォルダ, "System");
+													absSkinPath = System.IO.Path.Combine(absSkinPath, str4);
+													Uri u = new Uri(absSkinPath);
+													absSkinPath = u.AbsolutePath.ToString();    // str4内に相対パスがある場合に備える
+													absSkinPath = System.Web.HttpUtility.UrlDecode(absSkinPath);                        // デコードする
+													absSkinPath = absSkinPath.Replace('/', System.IO.Path.DirectorySeparatorChar);  // 区切り文字が\ではなく/なので置換する
 												}
-												if ( absSkinPath[ absSkinPath.Length - 1 ] != System.IO.Path.DirectorySeparatorChar )	// フォルダ名末尾に\を必ずつけて、CSkin側と表記を統一する
+												if (absSkinPath[absSkinPath.Length - 1] != System.IO.Path.DirectorySeparatorChar)   // フォルダ名末尾に\を必ずつけて、CSkin側と表記を統一する
 												{
 													absSkinPath += System.IO.Path.DirectorySeparatorChar;
 												}
 												this.strSystemSkinSubfolderFullName = absSkinPath;
 											}
-                                            else if (str3.Equals(nameof(FastRender)))
-                                            {
-                                                FastRender = C変換.bONorOFF(str4[0]);
-                                            }
-                                            #endregion
-                                            #region [ Window関係 ]
-                                            else if (str3.Equals("FullScreen"))
-                                            {
-                                                this.b全画面モード = C変換.bONorOFF(str4[0]);
-                                            }
-                                            else if ( str3.Equals( "WindowX" ) )		// #30675 2013.02.04 ikanick add
+											else if (str3.Equals(nameof(FastRender)))
+											{
+												FastRender = C変換.bONorOFF(str4[0]);
+											}
+											#endregion
+											#region [ Window関係 ]
+											else if (str3.Equals("FullScreen"))
+											{
+												this.b全画面モード = C変換.bONorOFF(str4[0]);
+											}
+											else if (str3.Equals("WindowX"))        // #30675 2013.02.04 ikanick add
 											{
 												this.n初期ウィンドウ開始位置X = C変換.n値を文字列から取得して範囲内に丸めて返す(
-                                                    str4, 0,  System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width - 1 , this.n初期ウィンドウ開始位置X );
+													str4, 0, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width - 1, this.n初期ウィンドウ開始位置X);
 											}
-											else if ( str3.Equals( "WindowY" ) )		// #30675 2013.02.04 ikanick add
+											else if (str3.Equals("WindowY"))        // #30675 2013.02.04 ikanick add
 											{
 												this.n初期ウィンドウ開始位置Y = C変換.n値を文字列から取得して範囲内に丸めて返す(
-                                                    str4, 0,  System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height - 1 , this.n初期ウィンドウ開始位置Y );
+													str4, 0, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height - 1, this.n初期ウィンドウ開始位置Y);
 											}
-											else if ( str3.Equals( "WindowWidth" ) )		// #23510 2010.10.31 yyagi add
+											else if (str3.Equals("WindowWidth"))        // #23510 2010.10.31 yyagi add
 											{
-												this.nウインドウwidth = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 1, 65535, this.nウインドウwidth );
-												if( this.nウインドウwidth <= 0 )
+												this.nウインドウwidth = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 1, 65535, this.nウインドウwidth);
+												if (this.nウインドウwidth <= 0)
 												{
 													this.nウインドウwidth = SampleFramework.GameWindowSize.Width;
 												}
 											}
-											else if( str3.Equals( "WindowHeight" ) )		// #23510 2010.10.31 yyagi add
+											else if (str3.Equals("WindowHeight"))       // #23510 2010.10.31 yyagi add
 											{
-												this.nウインドウheight = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 1, 65535, this.nウインドウheight );
-												if( this.nウインドウheight <= 0 )
+												this.nウインドウheight = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 1, 65535, this.nウインドウheight);
+												if (this.nウインドウheight <= 0)
 												{
 													this.nウインドウheight = SampleFramework.GameWindowSize.Height;
 												}
 											}
-											else if ( str3.Equals( "DoubleClickFullScreen" ) )	// #26752 2011.11.27 yyagi
+											else if (str3.Equals("DoubleClickFullScreen"))  // #26752 2011.11.27 yyagi
 											{
-												this.bIsAllowedDoubleClickFullscreen = C変換.bONorOFF( str4[ 0 ] );
+												this.bIsAllowedDoubleClickFullscreen = C変換.bONorOFF(str4[0]);
 											}
-											else if ( str3.Equals( "EnableSystemMenu" ) )		// #28200 2012.5.1 yyagi
+											else if (str3.Equals("EnableSystemMenu"))       // #28200 2012.5.1 yyagi
 											{
-												this.bIsEnabledSystemMenu = C変換.bONorOFF( str4[ 0 ] );
+												this.bIsEnabledSystemMenu = C変換.bONorOFF(str4[0]);
 											}
-											else if ( str3.Equals( "BackSleep" ) )				// #23568 2010.11.04 ikanick add
+											else if (str3.Equals("BackSleep"))              // #23568 2010.11.04 ikanick add
 											{
-												this.n非フォーカス時スリープms = C変換.n値を文字列から取得して範囲内にちゃんと丸めて返す( str4, 0, 50, this.n非フォーカス時スリープms );
+												this.n非フォーカス時スリープms = C変換.n値を文字列から取得して範囲内にちゃんと丸めて返す(str4, 0, 50, this.n非フォーカス時スリープms);
 											}
-                                            #endregion
+											#endregion
 
-                                            #region [ WASAPI/ASIO関係 ]
-                                            else if ( str3.Equals( "SoundDeviceType" ) )
+											#region [ WASAPI/ASIO関係 ]
+											else if (str3.Equals("SoundDeviceType"))
 											{
-												this.nSoundDeviceType = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 2, this.nSoundDeviceType );
+												this.nSoundDeviceType = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, 2, this.nSoundDeviceType);
 											}
-											else if ( str3.Equals( "WASAPIBufferSizeMs" ) )
+											else if (str3.Equals("WASAPIBufferSizeMs"))
 											{
-											    this.nWASAPIBufferSizeMs = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 9999, this.nWASAPIBufferSizeMs );
+												this.nWASAPIBufferSizeMs = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, 9999, this.nWASAPIBufferSizeMs);
 											}
-											else if ( str3.Equals( "ASIODevice" ) )
+											else if (str3.Equals("ASIODevice"))
 											{
 												string[] asiodev = CEnumerateAllAsioDevices.GetAllASIODevices();
-												this.nASIODevice = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, asiodev.Length - 1, this.nASIODevice );
+												this.nASIODevice = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, asiodev.Length - 1, this.nASIODevice);
 											}
 											//else if ( str3.Equals( "ASIOBufferSizeMs" ) )
 											//{
@@ -2216,65 +2221,70 @@ namespace TJAPlayer3
 											//{
 											//    this.bDynamicBassMixerManagement = C変換.bONorOFF( str4[ 0 ] );
 											//}
-											else if ( str3.Equals( "SoundTimerType" ) )			// #33689 2014.6.6 yyagi
+											else if (str3.Equals("SoundTimerType"))         // #33689 2014.6.6 yyagi
 											{
-												this.bUseOSTimer = C変換.bONorOFF( str4[ 0 ] );
+												this.bUseOSTimer = C変換.bONorOFF(str4[0]);
 											}
-                                            //else if ( str3.Equals( "MasterVolume" ) )
-                                            //{
-                                            //    this.nMasterVolume = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 100, this.nMasterVolume );
-                                            //}
-                                            #endregion
+											//else if ( str3.Equals( "MasterVolume" ) )
+											//{
+											//    this.nMasterVolume = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 100, this.nMasterVolume );
+											//}
+											#endregion
 
-                                            #region [ フォント ]
-                                            else if (str3.Equals("FontName"))
-                                            {
-                                                this.FontName = str4;
-                                            }
-                                            #endregion
+											#region [ フォント ]
+											else if (str3.Equals("FontName"))
+											{
+												this.FontName = str4;
+											}
 
-                                            else if ( str3.Equals( "VSyncWait" ) )
+											#endregion
+
+											else if (str3.Equals("oed"))
 											{
-												this.b垂直帰線待ちを行う = C変換.bONorOFF( str4[ 0 ] );
+												this.oed = C変換.bONorOFF(str4[0]);
 											}
-											else if( str3.Equals( "SleepTimePerFrame" ) )		// #23568 2011.11.27 yyagi
+											else if (str3.Equals("VSyncWait"))
 											{
-												this.nフレーム毎スリープms = C変換.n値を文字列から取得して範囲内にちゃんと丸めて返す( str4, -1, 50, this.nフレーム毎スリープms );
+												this.b垂直帰線待ちを行う = C変換.bONorOFF(str4[0]);
 											}
-											else if( str3.Equals( "BGAlpha" ) )
+											else if (str3.Equals("SleepTimePerFrame"))      // #23568 2011.11.27 yyagi
 											{
-												this.n背景の透過度 = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 0xff, this.n背景の透過度 );
+												this.nフレーム毎スリープms = C変換.n値を文字列から取得して範囲内にちゃんと丸めて返す(str4, -1, 50, this.nフレーム毎スリープms);
 											}
-											else if( str3.Equals( "DamageLevel" ) )
+											else if (str3.Equals("BGAlpha"))
 											{
-												this.eダメージレベル = (Eダメージレベル) C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 2, (int) this.eダメージレベル );
+												this.n背景の透過度 = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, 0xff, this.n背景の透過度);
 											}
-											else if ( str3.Equals( "StageFailed" ) )
+											else if (str3.Equals("DamageLevel"))
 											{
-												this.bSTAGEFAILED有効 = C変換.bONorOFF( str4[ 0 ] );
+												this.eダメージレベル = (Eダメージレベル)C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, 2, (int)this.eダメージレベル);
+											}
+											else if (str3.Equals("StageFailed"))
+											{
+												this.bSTAGEFAILED有効 = C変換.bONorOFF(str4[0]);
 											}
 											#region [ AVI/BGA ]
-											else if( str3.Equals( "AVI" ) )
+											else if (str3.Equals("AVI"))
 											{
-												this.bAVI有効 = C変換.bONorOFF( str4[ 0 ] );
+												this.bAVI有効 = C変換.bONorOFF(str4[0]);
 											}
-											else if( str3.Equals( "BGA" ) )
+											else if (str3.Equals("BGA"))
 											{
-												this.bBGA有効 = C変換.bONorOFF( str4[ 0 ] );
+												this.bBGA有効 = C変換.bONorOFF(str4[0]);
 											}
-											else if( str3.Equals( "ClipDispType" ) )
+											else if (str3.Equals("ClipDispType"))
 											{
-												this.eClipDispType = (EClipDispType)C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 3, (int) this.eClipDispType );
+												this.eClipDispType = (EClipDispType)C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, 3, (int)this.eClipDispType);
 											}
 											#endregion
 											#region [ プレビュー音 ]
-											else if( str3.Equals( "PreviewSoundWait" ) )
+											else if (str3.Equals("PreviewSoundWait"))
 											{
-												this.n曲が選択されてからプレビュー音が鳴るまでのウェイトms = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 0x5f5e0ff, this.n曲が選択されてからプレビュー音が鳴るまでのウェイトms );
+												this.n曲が選択されてからプレビュー音が鳴るまでのウェイトms = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, 0x5f5e0ff, this.n曲が選択されてからプレビュー音が鳴るまでのウェイトms);
 											}
-											else if( str3.Equals( "PreviewImageWait" ) )
+											else if (str3.Equals("PreviewImageWait"))
 											{
-												this.n曲が選択されてからプレビュー画像が表示開始されるまでのウェイトms = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 0x5f5e0ff, this.n曲が選択されてからプレビュー画像が表示開始されるまでのウェイトms );
+												this.n曲が選択されてからプレビュー画像が表示開始されるまでのウェイトms = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, 0x5f5e0ff, this.n曲が選択されてからプレビュー画像が表示開始されるまでのウェイトms);
 											}
 											#endregion
 											//else if( str3.Equals( "AdjustWaves" ) )
@@ -2282,171 +2292,171 @@ namespace TJAPlayer3
 											//	this.bWave再生位置自動調整機能有効 = C変換.bONorOFF( str4[ 0 ] );
 											//}
 											#region [ BGM/ドラムのヒット音 ]
-											else if( str3.Equals( "BGMSound" ) )
+											else if (str3.Equals("BGMSound"))
 											{
-												this.bBGM音を発声する = C変換.bONorOFF( str4[ 0 ] );
+												this.bBGM音を発声する = C変換.bONorOFF(str4[0]);
 											}
 											#endregion
-											else if( str3.Equals( "SaveScoreIni" ) )
+											else if (str3.Equals("SaveScoreIni"))
 											{
-												this.bScoreIniを出力する = C変換.bONorOFF( str4[ 0 ] );
+												this.bScoreIniを出力する = C変換.bONorOFF(str4[0]);
 											}
-											else if( str3.Equals( "RandomFromSubBox" ) )
+											else if (str3.Equals("RandomFromSubBox"))
 											{
-												this.bランダムセレクトで子BOXを検索対象とする = C変換.bONorOFF( str4[ 0 ] );
+												this.bランダムセレクトで子BOXを検索対象とする = C変換.bONorOFF(str4[0]);
 											}
 											#region [ コンボ数 ]
-											else if( str3.Equals( "MinComboDrums" ) )
+											else if (str3.Equals("MinComboDrums"))
 											{
-												this.n表示可能な最小コンボ数.Drums = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 1, 0x1869f, this.n表示可能な最小コンボ数.Drums );
+												this.n表示可能な最小コンボ数.Drums = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 1, 0x1869f, this.n表示可能な最小コンボ数.Drums);
 											}
 											#endregion
-											else if( str3.Equals( "ShowDebugStatus" ) )
+											else if (str3.Equals("ShowDebugStatus"))
 											{
-												this.b演奏情報を表示する = C変換.bONorOFF( str4[ 0 ] );
+												this.b演奏情報を表示する = C変換.bONorOFF(str4[0]);
 											}
-											else if( str3.Equals( nameof(ApplyLoudnessMetadata) ) )
+											else if (str3.Equals(nameof(ApplyLoudnessMetadata)))
 											{
-												this.ApplyLoudnessMetadata = C変換.bONorOFF( str4[ 0 ] );
+												this.ApplyLoudnessMetadata = C変換.bONorOFF(str4[0]);
 											}
-											else if( str3.Equals( nameof(TargetLoudness) ) )
+											else if (str3.Equals(nameof(TargetLoudness)))
 											{
-												this.TargetLoudness = C変換.db値を文字列から取得して範囲内に丸めて返す( str4, CSound.MinimumLufs.ToDouble(), CSound.MaximumLufs.ToDouble(), this.TargetLoudness );
+												this.TargetLoudness = C変換.db値を文字列から取得して範囲内に丸めて返す(str4, CSound.MinimumLufs.ToDouble(), CSound.MaximumLufs.ToDouble(), this.TargetLoudness);
 											}
-											else if( str3.Equals( nameof(ApplySongVol) ) )
+											else if (str3.Equals(nameof(ApplySongVol)))
 											{
-												this.ApplySongVol = C変換.bONorOFF( str4[ 0 ] );
+												this.ApplySongVol = C変換.bONorOFF(str4[0]);
 											}
-											else if( str3.Equals( nameof(SoundEffectLevel) ) )
+											else if (str3.Equals(nameof(SoundEffectLevel)))
 											{
-												this.SoundEffectLevel = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, CSound.MinimumGroupLevel, CSound.MaximumGroupLevel, this.SoundEffectLevel );
+												this.SoundEffectLevel = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, CSound.MinimumGroupLevel, CSound.MaximumGroupLevel, this.SoundEffectLevel);
 											}
-											else if( str3.Equals( nameof(VoiceLevel) ) )
+											else if (str3.Equals(nameof(VoiceLevel)))
 											{
-												this.VoiceLevel = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, CSound.MinimumGroupLevel, CSound.MaximumGroupLevel, this.VoiceLevel );
+												this.VoiceLevel = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, CSound.MinimumGroupLevel, CSound.MaximumGroupLevel, this.VoiceLevel);
 											}
-											else if( str3.Equals( nameof(SongPreviewLevel) ) )
+											else if (str3.Equals(nameof(SongPreviewLevel)))
 											{
-												this.SongPreviewLevel = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, CSound.MinimumGroupLevel, CSound.MaximumGroupLevel, this.SongPreviewLevel );
+												this.SongPreviewLevel = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, CSound.MinimumGroupLevel, CSound.MaximumGroupLevel, this.SongPreviewLevel);
 											}
-											else if( str3.Equals( nameof(SongPlaybackLevel) ) )
+											else if (str3.Equals(nameof(SongPlaybackLevel)))
 											{
-												this.SongPlaybackLevel = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, CSound.MinimumGroupLevel, CSound.MaximumGroupLevel, this.SongPlaybackLevel );
+												this.SongPlaybackLevel = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, CSound.MinimumGroupLevel, CSound.MaximumGroupLevel, this.SongPlaybackLevel);
 											}
-											else if( str3.Equals( nameof(KeyboardSoundLevelIncrement) ) )
+											else if (str3.Equals(nameof(KeyboardSoundLevelIncrement)))
 											{
-												this.KeyboardSoundLevelIncrement = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, MinimumKeyboardSoundLevelIncrement, MaximumKeyboardSoundLevelIncrement, this.KeyboardSoundLevelIncrement );
+												this.KeyboardSoundLevelIncrement = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, MinimumKeyboardSoundLevelIncrement, MaximumKeyboardSoundLevelIncrement, this.KeyboardSoundLevelIncrement);
 											}
-                                            else if( str3.Equals(nameof(MusicPreTimeMs)))
-                                            {
-                                                MusicPreTimeMs = int.Parse(str4);
-                                            }
-											else if( str3.Equals( "StoicMode" ) )
+											else if (str3.Equals(nameof(MusicPreTimeMs)))
 											{
-												this.bストイックモード = C変換.bONorOFF( str4[ 0 ] );
+												MusicPreTimeMs = int.Parse(str4);
 											}
-											else if ( str3.Equals( "JudgeDispPriority" ) )
+											else if (str3.Equals("StoicMode"))
 											{
-												this.e判定表示優先度 = (E判定表示優先度) C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 1, (int) this.e判定表示優先度 );
+												this.bストイックモード = C変換.bONorOFF(str4[0]);
 											}
-											else if ( str3.Equals( "AutoResultCapture" ) )			// #25399 2011.6.9 yyagi
+											else if (str3.Equals("JudgeDispPriority"))
 											{
-												this.bIsAutoResultCapture = C変換.bONorOFF( str4[ 0 ] );
+												this.e判定表示優先度 = (E判定表示優先度)C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, 1, (int)this.e判定表示優先度);
 											}
-                                            else if (str3.Equals(nameof(SendDiscordPlayingInformation)))
-                                            {
-                                                SendDiscordPlayingInformation = C変換.bONorOFF(str4[0]);
-                                            }
-                                            else if ( str3.Equals( "TimeStretch" ) )				// #23664 2013.2.24 yyagi
+											else if (str3.Equals("AutoResultCapture"))          // #25399 2011.6.9 yyagi
 											{
-												this.bTimeStretch = C変換.bONorOFF( str4[ 0 ] );
+												this.bIsAutoResultCapture = C変換.bONorOFF(str4[0]);
+											}
+											else if (str3.Equals(nameof(SendDiscordPlayingInformation)))
+											{
+												SendDiscordPlayingInformation = C変換.bONorOFF(str4[0]);
+											}
+											else if (str3.Equals("TimeStretch"))                // #23664 2013.2.24 yyagi
+											{
+												this.bTimeStretch = C変換.bONorOFF(str4[0]);
 											}
 											#region [ AdjustTime ]
-											else if( str3.Equals( "InputAdjustTime" ) )
+											else if (str3.Equals("InputAdjustTime"))
 											{
-												this.nInputAdjustTimeMs = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, -99, 99, this.nInputAdjustTimeMs );
+												this.nInputAdjustTimeMs = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, -99, 99, this.nInputAdjustTimeMs);
 											}
-											else if ( str3.Equals( "JudgeLinePosOffsetDrums" ) )		// #31602 2013.6.23 yyagi
+											else if (str3.Equals("JudgeLinePosOffsetDrums"))        // #31602 2013.6.23 yyagi
 											{
-												this.nJudgeLinePosOffset.Drums = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, -99, 99, this.nJudgeLinePosOffset.Drums );
+												this.nJudgeLinePosOffset.Drums = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, -99, 99, this.nJudgeLinePosOffset.Drums);
 											}
-											else if ( str3.Equals( "JudgeLinePosOffsetGuitar" ) )		// #31602 2013.6.23 yyagi
+											else if (str3.Equals("JudgeLinePosOffsetGuitar"))       // #31602 2013.6.23 yyagi
 											{
-												this.nJudgeLinePosOffset.Guitar = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, -99, 99, this.nJudgeLinePosOffset.Guitar );
+												this.nJudgeLinePosOffset.Guitar = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, -99, 99, this.nJudgeLinePosOffset.Guitar);
 											}
-											else if ( str3.Equals( "JudgeLinePosOffsetBass" ) )			// #31602 2013.6.23 yyagi
+											else if (str3.Equals("JudgeLinePosOffsetBass"))         // #31602 2013.6.23 yyagi
 											{
-												this.nJudgeLinePosOffset.Bass = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, -99, 99, this.nJudgeLinePosOffset.Bass );
+												this.nJudgeLinePosOffset.Bass = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, -99, 99, this.nJudgeLinePosOffset.Bass);
 											}
-											else if ( str3.Equals( "JudgeLinePosModeGuitar" ) )	// #33891 2014.6.26 yyagi
+											else if (str3.Equals("JudgeLinePosModeGuitar")) // #33891 2014.6.26 yyagi
 											{
-												this.e判定位置.Guitar = (E判定位置) C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 2, (int) this.e判定位置.Guitar );
+												this.e判定位置.Guitar = (E判定位置)C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, 2, (int)this.e判定位置.Guitar);
 											}
-											else if ( str3.Equals( "JudgeLinePosModeBass" ) )		// #33891 2014.6.26 yyagi
+											else if (str3.Equals("JudgeLinePosModeBass"))       // #33891 2014.6.26 yyagi
 											{
-												this.e判定位置.Bass = (E判定位置) C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 2, (int) this.e判定位置.Bass );
+												this.e判定位置.Bass = (E判定位置)C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, 2, (int)this.e判定位置.Bass);
 											}
 											#endregion
-											else if( str3.Equals( "BufferedInput" ) )
+											else if (str3.Equals("BufferedInput"))
 											{
-												this.bバッファ入力を行う = C変換.bONorOFF( str4[ 0 ] );
+												this.bバッファ入力を行う = C変換.bONorOFF(str4[0]);
 											}
-											else if ( str3.Equals( "PolyphonicSounds" ) )		// #28228 2012.5.1 yyagi
+											else if (str3.Equals("PolyphonicSounds"))       // #28228 2012.5.1 yyagi
 											{
-												this.nPoliphonicSounds = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 1, 8, this.nPoliphonicSounds );
+												this.nPoliphonicSounds = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 1, 8, this.nPoliphonicSounds);
 											}
 											#region [ VelocityMin ]
-											else if ( str3.Equals( "LCVelocityMin" ) )			// #23857 2010.12.12 yyagi
+											else if (str3.Equals("LCVelocityMin"))          // #23857 2010.12.12 yyagi
 											{
-												this.nVelocityMin.LC = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 127, this.nVelocityMin.LC );
+												this.nVelocityMin.LC = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, 127, this.nVelocityMin.LC);
 											}
-											else if( str3.Equals( "HHVelocityMin" ) )
+											else if (str3.Equals("HHVelocityMin"))
 											{
-												this.nVelocityMin.HH = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 127, this.nVelocityMin.HH );
+												this.nVelocityMin.HH = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, 127, this.nVelocityMin.HH);
 											}
-											else if( str3.Equals( "SDVelocityMin" ) )			// #23857 2011.1.31 yyagi
+											else if (str3.Equals("SDVelocityMin"))          // #23857 2011.1.31 yyagi
 											{
-												this.nVelocityMin.SD = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 127, this.nVelocityMin.SD );
+												this.nVelocityMin.SD = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, 127, this.nVelocityMin.SD);
 											}
-											else if( str3.Equals( "BDVelocityMin" ) )			// #23857 2011.1.31 yyagi
+											else if (str3.Equals("BDVelocityMin"))          // #23857 2011.1.31 yyagi
 											{
-												this.nVelocityMin.BD = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 127, this.nVelocityMin.BD );
+												this.nVelocityMin.BD = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, 127, this.nVelocityMin.BD);
 											}
-											else if( str3.Equals( "HTVelocityMin" ) )			// #23857 2011.1.31 yyagi
+											else if (str3.Equals("HTVelocityMin"))          // #23857 2011.1.31 yyagi
 											{
-												this.nVelocityMin.HT = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 127, this.nVelocityMin.HT );
+												this.nVelocityMin.HT = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, 127, this.nVelocityMin.HT);
 											}
-											else if( str3.Equals( "LTVelocityMin" ) )			// #23857 2011.1.31 yyagi
+											else if (str3.Equals("LTVelocityMin"))          // #23857 2011.1.31 yyagi
 											{
-												this.nVelocityMin.LT = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 127, this.nVelocityMin.LT );
+												this.nVelocityMin.LT = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, 127, this.nVelocityMin.LT);
 											}
-											else if( str3.Equals( "FTVelocityMin" ) )			// #23857 2011.1.31 yyagi
+											else if (str3.Equals("FTVelocityMin"))          // #23857 2011.1.31 yyagi
 											{
-												this.nVelocityMin.FT = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 127, this.nVelocityMin.FT );
+												this.nVelocityMin.FT = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, 127, this.nVelocityMin.FT);
 											}
-											else if( str3.Equals( "CYVelocityMin" ) )			// #23857 2011.1.31 yyagi
+											else if (str3.Equals("CYVelocityMin"))          // #23857 2011.1.31 yyagi
 											{
-												this.nVelocityMin.CY = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 127, this.nVelocityMin.CY );
+												this.nVelocityMin.CY = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, 127, this.nVelocityMin.CY);
 											}
-											else if( str3.Equals( "RDVelocityMin" ) )			// #23857 2011.1.31 yyagi
+											else if (str3.Equals("RDVelocityMin"))          // #23857 2011.1.31 yyagi
 											{
-												this.nVelocityMin.RD = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 127, this.nVelocityMin.RD );
+												this.nVelocityMin.RD = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, 127, this.nVelocityMin.RD);
 											}
 											#endregion
 											//else if ( str3.Equals( "NoMP3Streaming" ) )
 											//{
 											//    this.bNoMP3Streaming = C変換.bONorOFF( str4[ 0 ] );
-                                            //}
-                                            #region[ Ver.K追加 ]
-											else if ( str3.Equals( "DirectShowMode" ) )		// #28228 2012.5.1 yyagi
+											//}
+											#region[ Ver.K追加 ]
+											else if (str3.Equals("DirectShowMode"))     // #28228 2012.5.1 yyagi
 											{
-                                                this.bDirectShowMode = C変換.bONorOFF( str4[ 0 ] ); ;
+												this.bDirectShowMode = C変換.bONorOFF(str4[0]); ;
 											}
-                                            #endregion
-                                            else if( str3.Equals( "EndingAnime" ) )
-                                            {
-                                                this.bEndingAnime = C変換.bONorOFF( str4[ 0 ] );
-                                            }
+											#endregion
+											else if (str3.Equals("EndingAnime"))
+											{
+												this.bEndingAnime = C変換.bONorOFF(str4[0]);
+											}
 
                                             continue;
 										}

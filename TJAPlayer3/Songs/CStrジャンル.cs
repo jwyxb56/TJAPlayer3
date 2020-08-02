@@ -10,6 +10,8 @@
         public const string どうよう = "どうよう";
         public const string バラエティ = "バラエティ";
         public const string ボーカロイドJP = "ボーカロイド";
-        public const string ボーカロイドEN = "VOCALOID";
+        public const string ボーカロイドEN = "VOCALOID"; 
+        public const string DAN = "DAN";
+
     }
 }

@@ -456,9 +456,17 @@ namespace TJAPlayer3
 
             FastRender = new CItemToggle(nameof(FastRender), TJAPlayer3.ConfigIni.FastRender,
                 "事前画像描画機能を使うかどうか。\n",
-                "Use pre-textures render.\n");
+                "oed use.\n");
+
             this.list項目リスト.Add(FastRender);
-            ShowPuchiChara = new CItemToggle("ShowPuchiChara", TJAPlayer3.ConfigIni.ShowPuchiChara,
+
+			oed = new CItemToggle(nameof(oed), TJAPlayer3.ConfigIni.oed,
+			   "大江戸勘亭流を使うかどうか。\n",
+			   "Use pre-textures render.\n");
+
+			this.list項目リスト.Add(oed);
+
+			ShowPuchiChara = new CItemToggle("ShowPuchiChara", TJAPlayer3.ConfigIni.ShowPuchiChara,
                 "ぷちキャラ画像を表示するかどうか\n",
                 "Show PuchiChara Images.\n" +
                 "");
@@ -2147,7 +2155,8 @@ namespace TJAPlayer3
         CItemToggle ShowPuchiChara;
         CItemToggle ShinuchiMode;
         CItemToggle FastRender;
-        CItemInteger MusicPreTimeMs;
+		CItemToggle oed;
+		CItemInteger MusicPreTimeMs;
 		private CItemToggle iGuitarR;						//
 		private CItemToggle iGuitarG;						//
 		private CItemToggle iGuitarB;						//
@@ -2298,6 +2307,7 @@ namespace TJAPlayer3
             TJAPlayer3.ConfigIni.ShowPuchiChara = this.ShowPuchiChara.bON;
             TJAPlayer3.ConfigIni.nPlayerCount = this.iTaikoPlayerCount.n現在の値;
             TJAPlayer3.ConfigIni.FastRender = this.FastRender.bON;
+			TJAPlayer3.ConfigIni.oed = this.oed.bON;
 		}
 		private void tConfigIniへ記録する_Bass()
 		{

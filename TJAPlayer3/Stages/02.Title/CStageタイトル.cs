@@ -141,7 +141,6 @@ namespace TJAPlayer3
 				#endregion
 
 				// キー入力
-
 				if (base.eフェーズID == CStage.Eフェーズ.共通_通常状態)   // 通常状態
 				{
 					if (TJAPlayer3.Input管理.Keyboard.bキーが押された((int)Key.Escape))
@@ -150,12 +149,16 @@ namespace TJAPlayer3
 					this.ctキー反復用.Up.tキー反復(TJAPlayer3.Input管理.Keyboard.bキーが押されている((int)SlimDX.DirectInput.Key.UpArrow), new CCounter.DGキー処理(this.tカーソルを上へ移動する));
 					this.ctキー反復用.R.tキー反復(TJAPlayer3.Pad.b押されているGB(Eパッド.HH), new CCounter.DGキー処理(this.tカーソルを上へ移動する));
 					if (TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.SD))
+					{
+						
 						this.tカーソルを上へ移動する();
-
+					}
 					this.ctキー反復用.Down.tキー反復(TJAPlayer3.Input管理.Keyboard.bキーが押されている((int)SlimDX.DirectInput.Key.DownArrow), new CCounter.DGキー処理(this.tカーソルを下へ移動する));
 					this.ctキー反復用.B.tキー反復(TJAPlayer3.Pad.b押されているGB(Eパッド.BD), new CCounter.DGキー処理(this.tカーソルを下へ移動する));
 					if (TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.LT))
-						this.tカーソルを下へ移動する();
+					this.tカーソルを下へ移動する();
+
+						
 
 					if ((TJAPlayer3.Pad.b押されたDGB(Eパッド.CY) || TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.RD)) || (TJAPlayer3.Pad.b押された(E楽器パート.DRUMS, Eパッド.LC) || (TJAPlayer3.ConfigIni.bEnterがキー割り当てのどこにも使用されていない && TJAPlayer3.Input管理.Keyboard.bキーが押された((int)SlimDX.DirectInput.Key.Return))))
 					{
@@ -171,6 +174,10 @@ namespace TJAPlayer3
 						{
 							return (int)E戻り値.EXIT;
 						}
+						if ((this.n現在のカーソル行 == (int)E戻り値.DAN - 1) && TJAPlayer3.Skin.soundゲーム開始音.b読み込み成功)
+						{
+							TJAPlayer3.Skin.soundゲーム開始音.t再生する();
+						}
 						this.actFO.tフェードアウト開始();
 						base.eフェーズID = CStage.Eフェーズ.共通_フェードアウト;
 					}
@@ -179,20 +186,11 @@ namespace TJAPlayer3
 				}
 
 				// 描画
+				
 
 				if (TJAPlayer3.Tx.Title_Background != null)
-					TJAPlayer3.Tx.Title_Background.t2D描画(TJAPlayer3.app.Device, 0, 0);
+					TJAPlayer3.Tx.Title_Background.t2D描画(TJAPlayer3.app.Device, 0, 0 );
 
-				#region[ バージョン表示 ]
-				const string repositoryUrl = "https://github.com/KabanFriends/TJAPlayer3";
-#if DEBUG
-				TJAPlayer3.act文字コンソール.tPrint(4, 44, C文字コンソール.Eフォント種別.白, "DEBUG BUILD");
-#endif
-				TJAPlayer3.act文字コンソール.tPrint(4, 4, C文字コンソール.Eフォント種別.白, $"{TJAPlayer3.AppDisplayNameWithInformationalVersion} ({repositoryUrl};Fork of twopointzero/TJAPlayer3)");
-				TJAPlayer3.act文字コンソール.tPrint(4, 24, C文字コンソール.Eフォント種別.白, "Skin:" + TJAPlayer3.Skin.Skin_Name + " Ver." + TJAPlayer3.Skin.Skin_Version + " (" + TJAPlayer3.Skin.Skin_Creator + ")");
-				//CDTXMania.act文字コンソール.tPrint(4, 24, C文字コンソール.Eフォント種別.白, strSubTitle);
-				TJAPlayer3.act文字コンソール.tPrint(4, (720 - 24), C文字コンソール.Eフォント種別.白, $"{TJAPlayer3.AppDisplayName} is open source software under the MIT license. See README for acknowledgments.");
-				#endregion
 
 
 				if (TJAPlayer3.Tx.Title_Menu != null)
@@ -226,7 +224,7 @@ namespace TJAPlayer3
 				{
 					//this.txメニュー.t2D描画( CDTXMania.app.Device, 0xce, 0xcb, new Rectangle( 0, 0, MENU_W, MWNU_H ) );
 					// #24525 2011.3.16 yyagi: "OPTION"を省いて描画。従来スキンとの互換性確保のため。
-					TJAPlayer3.Tx.Title_Menu.t2D描画(TJAPlayer3.app.Device, MENU_X, MENU_Y, new Rectangle(0, 0, MENU_W, MENU_H));
+					TJAPlayer3.Tx.Title_Menu.t2D描画(TJAPlayer3.app.Device, MENU_X, MENU_Y, new Rectangle(0, 0 , MENU_W, MENU_H));
 					TJAPlayer3.Tx.Title_Menu.t2D描画(TJAPlayer3.app.Device, MENU_X, MENU_Y + MENU_H, new Rectangle(0, MENU_H * 2, MENU_W, MENU_H * 2));
 				}
 
@@ -234,13 +232,7 @@ namespace TJAPlayer3
 				// クライアント領域内のカーソル座標を取得する。
 				// point.X、point.Yは負の値になることもある。
 				var point = TJAPlayer3.app.Window.PointToClient(System.Windows.Forms.Cursor.Position);
-				// クライアント領域の横幅を取得して、1280で割る。もちろんdouble型。
-				var scaling = 1.000 * TJAPlayer3.app.Window.ClientSize.Width / 1280;
-				if (TJAPlayer3.Input管理.Mouse.bキーが押された((int)MouseObject.Button1))
-				{
-					if (point.X >= 180 * scaling && point.X <= 490 * scaling && point.Y >= 0 && point.Y <= 20 * scaling)
-						System.Diagnostics.Process.Start(repositoryUrl);
-				}
+				
 
 				//CDTXMania.act文字コンソール.tPrint(0, 80, C文字コンソール.Eフォント種別.白, point.X.ToString());
 				//CDTXMania.act文字コンソール.tPrint(0, 100, C文字コンソール.Eフォント種別.白, point.Y.ToString());
@@ -274,6 +266,9 @@ namespace TJAPlayer3
 
 							case (int)E戻り値.EXIT - 1:
 								return (int)E戻り値.EXIT;
+
+							case (int)E戻り値.DAN - 1:
+								return (int)E戻り値.DAN;
 								//return ( this.n現在のカーソル行 + 1 );
 						}
 						break;
@@ -295,7 +290,8 @@ namespace TJAPlayer3
 			GAMESTART,
 			//			OPTION,
 			CONFIG,
-			EXIT
+			EXIT,
+			DAN
 		}
 
 
@@ -370,7 +366,7 @@ namespace TJAPlayer3
 
 		private void tカーソルを下へ移動する()
 		{
-			if (this.n現在のカーソル行 != (int)E戻り値.EXIT - 1)
+			if (this.n現在のカーソル行 != (int)E戻り値.DAN - 1)
 			{
 				TJAPlayer3.Skin.soundカーソル移動音.t再生する();
 				this.n現在のカーソル行++;
@@ -396,7 +392,15 @@ namespace TJAPlayer3
 				}
 			}
 		}
-		//-----------------
-		#endregion
+
+		private void コインを入れる()
+		{
+			
+			TJAPlayer3.Skin.soundカーソル移動音.t再生する();
+			
+		}
+
+			//-----------------
+			#endregion
+		}
 	}
-}

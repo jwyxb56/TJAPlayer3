@@ -25,6 +25,7 @@ namespace TJAPlayer3.C曲リストノードComparers
                     return 3;
                 case C曲リストノード.Eノード種別.BACKBOX:
                     return 4;
+           
                 default:
                     throw new ArgumentOutOfRangeException();
             }

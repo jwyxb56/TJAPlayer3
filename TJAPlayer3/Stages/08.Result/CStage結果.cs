@@ -304,7 +304,8 @@ namespace TJAPlayer3
 
 				if(TJAPlayer3.Tx.Result_Background != null )
 				{
-                    TJAPlayer3.Tx.Result_Background.t2D描画( TJAPlayer3.app.Device, 0, 0 );
+					TJAPlayer3.Tx.Result_Background2.t2D描画(TJAPlayer3.app.Device, 0, 0);
+					TJAPlayer3.Tx.Result_Background.t2D描画( TJAPlayer3.app.Device, 0, 0 );
 				}
 				if( this.ct登場用.b進行中 && ( TJAPlayer3.Tx.Result_Header != null ) )
 				{

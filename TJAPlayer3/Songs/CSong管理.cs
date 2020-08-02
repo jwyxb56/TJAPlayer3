@@ -251,8 +251,15 @@ namespace TJAPlayer3
                                             c曲リストノード.ForeColor = TJAPlayer3.Skin.SongSelect_ForeColor_Namco;
                                             c曲リストノード.BackColor = TJAPlayer3.Skin.SongSelect_BackColor_Namco;
                                             break;
-                                        default:
-                                            break;
+										case EジャンルAC15SortOrder.DAN:
+											c曲リストノード.ForeColor = TJAPlayer3.Skin.SongSelect_ForeColor_JPOP;
+											c曲リストノード.BackColor = TJAPlayer3.Skin.SongSelect_BackColor_JPOP;
+											break;
+
+										default:
+											c曲リストノード.ForeColor = TJAPlayer3.Skin.SongSelect_ForeColor_Namco;
+											c曲リストノード.BackColor = TJAPlayer3.Skin.SongSelect_BackColor_Namco;
+											break;
                                     }
 
 
@@ -381,7 +388,11 @@ namespace TJAPlayer3
                                         c曲リストノード.ForeColor = TJAPlayer3.Skin.SongSelect_ForeColor_Namco;
                                         c曲リストノード.BackColor = TJAPlayer3.Skin.SongSelect_BackColor_Namco;
                                         break;
-                                    default:
+									case EジャンルAC15SortOrder.DAN:
+										c曲リストノード.ForeColor = TJAPlayer3.Skin.SongSelect_ForeColor_JPOP;
+										c曲リストノード.BackColor = TJAPlayer3.Skin.SongSelect_BackColor_JPOP;
+										break;
+									default:
                                         break;
                                 }
 
@@ -581,7 +592,11 @@ namespace TJAPlayer3
                             c曲リストノード.ForeColor = TJAPlayer3.Skin.SongSelect_ForeColor_Namco;
                             c曲リストノード.BackColor = TJAPlayer3.Skin.SongSelect_BackColor_Namco;
                             break;
-                        default:
+						case EジャンルAC15SortOrder.DAN:
+							c曲リストノード.ForeColor = TJAPlayer3.Skin.SongSelect_ForeColor_JPOP;
+							c曲リストノード.BackColor = TJAPlayer3.Skin.SongSelect_BackColor_JPOP;
+							break;
+						default:
                             break;
                     }
 
@@ -1088,15 +1103,18 @@ namespace TJAPlayer3
 					//-----------------------------
 					#endregion
 
+
 					this.t曲リストへ後処理を適用する( c曲リストノード.list子リスト );
 					continue;
 				}
 				//-----------------------------
 				#endregion
 
+				
+
 				#region [ ノードにタイトルがないなら、最初に見つけたスコアのタイトルを設定する ]
 				//-----------------------------
-				if( string.IsNullOrEmpty( c曲リストノード.strタイトル ) )
+				if ( string.IsNullOrEmpty( c曲リストノード.strタイトル ) )
 				{
 					for( int j = 0; j < (int)Difficulty.Total; j++ )
 					{
