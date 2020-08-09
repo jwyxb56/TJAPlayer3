@@ -2367,8 +2367,8 @@ namespace TJAPlayer3
         public int nResultPanelP1Y = 0;
         public int nResultPanelP2X = 515;
         public int nResultPanelP2Y = 75;
-        public int nResultScoreP1X = 72;
-        public int nResultScoreP1Y = 228;
+        public int nResultScoreP1X = 132;
+        public int nResultScoreP1Y = 215;
         public int nResultJudge1_P1X = 815;
         public int nResultJudge1_P1Y = 182;
         public int nResultJudge2_P1X = 968;
@@ -2723,7 +2723,8 @@ namespace TJAPlayer3
         #endregion
         #endregion
         #region Result
-        public int[] Result_MusicName_XY = new int[] { 1254, 6 };
+        public int[] Result_MusicName_XY = new int[] { 1500, 69 };
+
         public int Result_MusicName_FontSize = 30;
         public ReferencePoint Result_MusicName_ReferencePoint = ReferencePoint.Right;
         public int[] Result_StageText_XY = new int[] { 2030, 6 };

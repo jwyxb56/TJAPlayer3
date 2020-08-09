@@ -518,7 +518,95 @@ namespace TJAPlayer3
             #endregion
         }
 
+        protected void Tスコア文字表示SCORE(CTexture txScore, int x, int y, int n間隔, string str, ref CCounter ctスコア待機用, ref CCounter ctスコア終了用, ref int n現在の桁数, ref bool b数字アニメを終了した, bool isScore = false)
+        {
+            ctスコア待機用.t進行();
+            ctスコア終了用.t進行();
+            if (b数字アニメを終了した)
+            {
+                #region [ 終了用カウンターの処理 ]
+                if (!ctスコア終了用.b進行中)
+                {
+                    ctスコア終了用.t進行();//終了用カウンターを動かす(本家では間隔が違ったので)
+                    ctスコア終了用.n現在の値 = 0;//終了用カウンターを動かす
+                }
+                #endregion
+            }
+            else
+            {
+                #region [ ピッ！音の再生処理や停止処理 ]
+                if (n現在の桁数 < str.Length - (str.Length > 1 ? 1 : 0))
+                {
+                    if (!TJAPlayer3.Skin.sound数字回転音.b再生中)
+                        TJAPlayer3.Skin.sound数字回転音.t再生する();
+                }
+                if ((!ctスコア待機用.b進行中 || ctスコア待機用.n現在の値 == ctスコア待機用.n終了値))
+                {
+                    if (n現在の桁数 < str.Length && n現在の桁数 >= str.Length - 1)
+                    {
+                        TJAPlayer3.Skin.sound数字回転音.t停止する();
+                        TJAPlayer3.Skin.sound決定音.t再生する();
+                    }
+                }
+                #endregion
+                #region [ 一文字ずつ増えていく仕組みをCCounterで再現 ]
+                if ((!ctスコア待機用.b進行中 || ctスコア待機用.n現在の値 == ctスコア待機用.n終了値))//カウンターの一文字間隔カウンターが終了値に達したら。
+                {
+                    ctスコア待機用.t進行();//カウンターをループさせる
+                    ctスコア待機用.n現在の値 = 0;//カウンターをループさせる
 
+                    if (n現在の桁数 < str.Length)
+                    {
+                        if (n現在の桁数 >= str.Length - 1)
+                        {
+                            TJAPlayer3.Skin.sound数字回転音.t停止する();//ピッ！音を止める。
+                            TJAPlayer3.Skin.sound決定音.t再生する();//ドン！音を再生。
+                        }
+                        n現在の桁数++;//1桁増やす。
+                    }
+                    else
+                    {
+                        b数字アニメを終了した = true;//終了処理のため終了したかを確認するbooleanをここで動かす！！！。。
+                        n現在の桁数 = str.Length;//念のため、終わった時に参照されている文字列の桁数にセット。
+                    }
+                }
+                #endregion
+            }
+            #region [ メインとなる数字 ]
+            for (int nScore = 0; nScore < n現在の桁数; nScore++)
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    char[] chars = str.ToCharArray();
+                    Array.Reverse(chars);
+                    var ret = new string(chars);
+
+                    if (char.Parse(i.ToString()) == ret.ToCharArray()[nScore])
+                    {
+                        if (txScore != null)
+                        {
+                            Rectangle rectangle = new Rectangle(43 * i, 0, 43, 57);
+                            txScore.t2D描画(TJAPlayer3.app.Device, x - (nScore * 37) + (isScore ? 155 : 65), y, rectangle);
+                        }
+                    }
+                }
+            }
+            #endregion
+            #region [ ぐるぐる回転する数字 ]
+            if (n現在の桁数 < str.Length)
+            {
+                if (txScore != null)
+                {
+                    Rectangle rectangle = new Rectangle(43 * this.ct数字回転.n現在の値, 0, 43, 57);
+                    txScore.t2D描画(TJAPlayer3.app.Device, x - ((n現在の桁数) * 37) + (isScore ? 155 : 65), y, rectangle);
+                }
+            }
+
+            {
+
+            }
+            #endregion
+        }
         //-----------------
         #endregion
 
@@ -544,7 +632,7 @@ namespace TJAPlayer3
             {
                 if (i == 0)
                 {
-                    this.tスコア文字表示(TJAPlayer3.Tx.Result_Score_Number, nScoreX[0], nScoreY[0], 20, this.nScores[0], ref this.c数字アニメーション[i].ct数字待機アニメ, ref this.c数字アニメーション[i].ct数字終了アニメ, ref this.c数字アニメーション[i].n現在の桁数, ref this.c数字アニメーション[i].b数字アニメ終了した, true);
+                    this.Tスコア文字表示SCORE(TJAPlayer3.Tx.Result_Score_Number, nScoreX[0], nScoreY[0], 20, this.nScores[0], ref this.c数字アニメーション[i].ct数字待機アニメ, ref this.c数字アニメーション[i].ct数字終了アニメ, ref this.c数字アニメーション[i].n現在の桁数, ref this.c数字アニメーション[i].b数字アニメ終了した, true);
                     if (this.c数字アニメーション[i].b数字アニメ終了した ? this.c数字アニメーション[i].ct数字終了アニメ.n現在の値 < this.c数字アニメーション[i].ct数字終了アニメ.n終了値 : true)
                         return;
                 }
